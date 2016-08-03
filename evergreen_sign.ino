@@ -26,16 +26,7 @@ void setup() {
 
 void loop() {
   
-  buttonState = digitalRead(buttonPin);
-  if (buttonState == HIGH && lastButtonState == HIGH) {
-   lightMode++; 
-   alreadyWiped = false;
-   delay(100); // crude debounce
-  }
-  if(lightMode == 4){
-    lightMode = 0;
-  }
-  lastButtonState = buttonState;
+  updateLightMode(100);
   
   if(lightMode == 0 && !alreadyWiped){
    colorWipe(strip.Color(255, 0, 0), 50); // red
@@ -70,4 +61,20 @@ void colorWipe(uint32_t c, uint8_t wait) {
     strip.show();
     delay(wait);
   }
+}
+
+void updateLightMode(int debounceTime){
+  buttonState = digitalRead(buttonPin);
+  if (
+   ( buttonState == HIGH && lastButtonState == HIGH )
+   || (buttonState == HIGH && lightMode == 3)
+  ) {
+   lightMode++; 
+   alreadyWiped = false;
+   delay(debounceTime); // crude debounce
+  }
+  if(lightMode == 4){
+    lightMode = 0;
+  }
+  lastButtonState = buttonState;
 }
