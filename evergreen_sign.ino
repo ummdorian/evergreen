@@ -13,6 +13,7 @@ Adafruit_NeoPixel strip = Adafruit_NeoPixel(107, PIN, NEO_GRB + NEO_KHZ800);
 //button pin
 const int buttonPin = 4;
 int buttonState = 0;
+int lastButtonState = 0;
 int lightMode = 0;
 int lightSubMode = 0;
 boolean alreadyWiped = false;
@@ -26,16 +27,18 @@ void setup() {
 void loop() {
   
   buttonState = digitalRead(buttonPin);
-  if (buttonState == HIGH) {
+  if (buttonState == HIGH && lastButtonState == HIGH) {
    lightMode++; 
+   alreadyWiped = false;
+   delay(100); // crude debounce
   }
   if(lightMode == 4){
     lightMode = 0;
   }
-  
+  lastButtonState = buttonState;
   
   if(lightMode == 0 && !alreadyWiped){
-   colorWipe(strip.Color(255, 100, 0), 50); // yellow
+   colorWipe(strip.Color(255, 0, 0), 50); // red
    alreadyWiped = true;
   }
   else if(lightMode == 1 && !alreadyWiped){
@@ -43,12 +46,12 @@ void loop() {
     alreadyWiped = true;
   }
   else if(lightMode == 2 && !alreadyWiped){
-    colorWipe(strip.Color(255, 0, 0), 50); // red
+    colorWipe(strip.Color(255, 100, 0), 50); // yellow
     alreadyWiped = true;
   }
   else if(lightMode == 3){
       if(lightSubMode == 0){
-        colorWipe(strip.Color(255, 100, 0), 50); // yellow
+        colorWipe(strip.Color(255, 0, 0), 50); // red
       }
       else if(lightSubMode == 1){
         colorWipe(strip.Color(255, 60, 0), 50); // orange
