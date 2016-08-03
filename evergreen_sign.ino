@@ -15,6 +15,7 @@ const int buttonPin = 4;
 int buttonState = 0;
 int lightMode = 0;
 int lightSubMode = 0;
+boolean alreadyWiped = false;
 
 void setup() {
   pinMode(buttonPin,INPUT);
@@ -33,14 +34,17 @@ void loop() {
   }
   
   
-  if(lightMode == 0){
+  if(lightMode == 0 && !alreadyWiped){
    colorWipe(strip.Color(255, 100, 0), 50); // yellow
+   alreadyWiped = true;
   }
-  else if(lightMode == 1){
+  else if(lightMode == 1 && !alreadyWiped){
     colorWipe(strip.Color(255, 60, 0), 50); // orange
+    alreadyWiped = true;
   }
-  else if(lightMode == 2){
+  else if(lightMode == 2 && !alreadyWiped){
     colorWipe(strip.Color(255, 0, 0), 50); // red
+    alreadyWiped = true;
   }
   else if(lightMode == 3){
       if(lightSubMode == 0){
